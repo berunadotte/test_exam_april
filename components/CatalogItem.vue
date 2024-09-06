@@ -26,15 +26,16 @@ const showDetails = (movie: Movie) => {
 <style scoped lang="scss">
 .catalog-item {
   border: 1px solid #ccc;
-  padding: 10px;
+  border-radius: 10px;
   margin: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
-  width: 200px;
-  height: 400px;
+  width: 20px;
+  min-width: 220px;
+  height: 380px;
 
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

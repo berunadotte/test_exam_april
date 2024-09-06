@@ -1,6 +1,6 @@
 <template>
   <div class="catalog-page">
-    <img class="catalog-page__logo" src="assets/IMDB_Logo.svg" alt="IMDB logo" >
+    <img class="catalog-page__logo" src="~/assets/IMDB_Logo.svg" alt="IMDB logo" >
     <div class="catalog-page__controls">
       <SearchBar class="catalog-page__search-bar" />
       <div class="catalog-page__view-controls">
@@ -9,20 +9,32 @@
           <span class="slider"></span>
         </label>
         <span class="view-label">{{
-          isHorizontal ? 'Горизонтальный' : 'Плиточный'
+          isHorizontal ? 'Карусель' : 'Плиточный'
         }}</span>
       </div>
     </div>
-    <div
-      class="catalog-page__catalog"
-      :class="isHorizontal ? 'horizontal' : 'grid'"
-    >
+    
+    <div v-if="!isHorizontal" class="catalog-page__catalog grid">
       <CatalogItem
         v-for="movie in paginatedMovies"
         :key="movie.id"
         :movie="movie"
         @show-details="showMovieDetails"
       />
+    </div>
+    <div v-else class="catalog-page__catalog carousel">
+      <button class="carousel-button prev" @click="prevSlide">&#10094;</button>
+      <div class="carousel-container">
+        <div class="carousel-track" :style="{ transform: `translateX(-${currentIndex * 200}px)` }">
+          <CatalogItem
+            v-for="movie in paginatedMovies"
+            :key="movie.id"
+            :movie="movie"
+            @show-details="showMovieDetails"
+          />
+        </div>
+      </div>
+      <button class="carousel-button next" @click="nextSlide">&#10095;</button>
     </div>
     <Pagination class="catalog-page__pagination" />
     <MovieModal
@@ -46,6 +58,7 @@ import type { Movie } from '~/types/types'
 const { $axios } = useNuxtApp()
 const store = useMovieStore()
 const isHorizontal = ref(false)
+const currentIndex = ref(0)
 
 onMounted(() => {
   store.fetchMovies($axios)
@@ -66,6 +79,18 @@ const showMovieDetails = (movie: Movie) => {
 
 const closeModal = () => {
   store.closeModal()
+}
+
+const prevSlide = () => {
+  if (currentIndex.value > 0) {
+    currentIndex.value--
+  }
+}
+
+const nextSlide = () => {
+  if (currentIndex.value < paginatedMovies.value.length - 4) {
+    currentIndex.value++
+  }
 }
 </script>
 
@@ -155,6 +180,8 @@ const closeModal = () => {
     justify-content: center;
     width: 100%;
     max-width: 1200px;
+    position: relative;
+    justify-items: center;
 
     &.grid {
       display: grid;
@@ -162,19 +189,44 @@ const closeModal = () => {
       gap: 20px;
     }
 
-    &.horizontal {
-      display: flex;
-      overflow-x: auto;
-      gap: 20px;
-
-      .catalog-item {
-        flex: 0 0 200px;
-      }
+    &.carousel {
+      overflow: hidden;
     }
   }
 
   &__pagination {
     margin-top: 20px;
   }
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 1;
+
+  &.prev {
+    left: 0;
+  }
+
+  &.next {
+    right: 0;
+  }
+}
+
+.carousel-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.3s ease;
 }
 </style>
