@@ -1,5 +1,6 @@
 <template>
   <div class="catalog-page">
+    <img class="catalog-page__logo" src="assets/IMDB_Logo.svg" alt="IMDB logo" >
     <div class="catalog-page__controls">
       <SearchBar class="catalog-page__search-bar" />
       <div class="catalog-page__view-controls">
@@ -73,6 +74,11 @@ const closeModal = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  &__logo {
+    width: 100px;
+    margin-bottom: 10px;
+  }
 
   &__controls {
     display: flex;

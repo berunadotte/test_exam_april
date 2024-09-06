@@ -12,17 +12,16 @@
   "dependencies": {
     "@nuxt/config": "^2.18.1",
     "@nuxt/kit": "^3.13.1",
-    "@nuxtjs/fontaine": "^0.4.3",
     "@pinia/nuxt": "^0.5.4",
     "axios": "^1.7.7",
     "nuxt": "^3.13.0",
-    "pinia": "^2.2.2",
     "sass": "^1.78.0",
     "vue": "^3.5.2",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "@nuxt/fonts": "^0.7.2"
+
   },
   "devDependencies": {
-    "@nuxt/fonts": "^0.7.2",
     "@vue/test-utils": "^2.4.6"
   }
 }
